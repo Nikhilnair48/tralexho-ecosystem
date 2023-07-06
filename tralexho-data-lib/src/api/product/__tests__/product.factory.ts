@@ -1,6 +1,6 @@
 import * as Factory from "factory.ts";
 import { faker } from "@faker-js/faker";
-import { IProduct } from "../types/product";
+import { IProduct } from "../types";
 
 export const productFactory = Factory.Sync.makeFactory<IProduct>({
   id: Factory.each(() => faker.string.uuid()), // Ensures a unique id for each product
