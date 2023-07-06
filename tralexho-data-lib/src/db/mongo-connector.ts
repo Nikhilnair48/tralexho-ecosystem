@@ -9,7 +9,7 @@ import mongoose, { Connection } from "mongoose";
 
 dotenv.config();
 
-async function createConnection(): Promise<Connection> {
+const createConnection = async (): Promise<Connection> => {
   const { MONGO_HOST, MONGO_PORT, MONGO_DB } = process.env;
   const url = `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}`;
 
@@ -17,6 +17,6 @@ async function createConnection(): Promise<Connection> {
 
   const db = mongoose.connection;
   return db;
-}
+};
 
 export { createConnection };
