@@ -1,4 +1,6 @@
+import { Box } from "@mui/system";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Typography, Button } from "@mui/material";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -32,9 +34,16 @@ const rows = [
 
 export const App = () => {
   return (
-    <>
-      <h1>Tralexho Ecosystem</h1>
-      <div style={{ height: 400, width: "100%" }}>
+    <Box padding={2}>
+      <Box display="flex" justifyContent="space-between" marginBottom={2}>
+        <Box display="flex">
+          <Typography variant="h4">Tralexho Ecosystem</Typography>
+        </Box>
+        <Box display="flex">
+          <Button variant="contained">Add</Button>
+        </Box>
+      </Box>
+      <Box style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -46,7 +55,7 @@ export const App = () => {
           pageSizeOptions={[5, 10]}
           checkboxSelection
         />
-      </div>
-    </>
+      </Box>
+    </Box>
   );
 };
