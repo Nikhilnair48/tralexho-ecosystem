@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Typography, Button } from "@mui/material";
 import { Modal } from "./common/Modal";
-import { useEffect, useState } from "react";
+import { IProduct } from "tralexho-data-lib/dist";
 
 let columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 70 },
   { field: "name", headerName: "Product", width: 130 },
   { field: "location", headerName: "Location", width: 130 },
   { field: "owner", headerName: "Owner", width: 130 },
@@ -17,35 +17,22 @@ let columns: GridColDef[] = [
   },
 ];
 
-// const rows = [
-//   {
-//     id: 1,
-//     name: "fish1",
-//     location: "Kochi",
-//     owner: "Tralexho",
-//     quantityInGrams: 250,
-//   },
-//   {
-//     id: 2,
-//     name: "fish2",
-//     location: "Kochi",
-//     owner: "Tralexho",
-//     quantityInGrams: 250,
-//   },
-// ];
-
 export const App = () => {
   const [showDialog, setShowDialog] = useState(false);
-  const [selectedRow, setSelectedRow] = useState({});
+  const [selectedRow, setSelectedRow] = useState<IProduct>({});
   const [operation, setOperation] = useState("");
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState<IProduct[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:3001/products");
-      const data = await response.json();
-      if (JSON.stringify(data) !== JSON.stringify(rows)) setRows(data);
-      console.log(data);
+      let data: any[] = await response.json();
+      if (JSON.stringify(data) !== JSON.stringify(rows)) {
+        data = data.map((item) => {
+          return { ...item, id: item._id };
+        });
+        setRows(data);
+      }
     };
     fetchData();
   }, [rows]);
@@ -54,6 +41,51 @@ export const App = () => {
     setShowDialog(false);
     setOperation("");
     setSelectedRow({});
+  };
+
+  const handleModalConfirm = async () => {
+    console.log(operation);
+    if (operation === "Add") {
+      const response = await fetch("http://localhost:3001/product", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedRow),
+      });
+      const data = await response.json();
+      console.log(JSON.stringify(data));
+    } else if (operation === "Edit") {
+      const response = await fetch(
+        `http://localhost:3001/product/${selectedRow.id}`,
+        {
+          method: "PUT",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(selectedRow),
+        }
+      );
+      const data = await response.json();
+      console.log(JSON.stringify(data));
+    } else if (operation === "Delete") {
+      const response = await fetch(
+        `http://localhost:3001/product/${selectedRow.id}`,
+        {
+          method: "DELETE",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(selectedRow),
+        }
+      );
+      const data = await response.json();
+      console.log(JSON.stringify(data));
+    }
+    setShowDialog(false);
   };
 
   const handleEdit = (row: any) => {
@@ -66,6 +98,18 @@ export const App = () => {
     setShowDialog(true);
     setOperation("Delete");
     setSelectedRow(row);
+  };
+
+  const handleAdd = () => {
+    setShowDialog(true);
+    setOperation("Add");
+    setSelectedRow({
+      id: -1,
+      name: "",
+      location: "",
+      owner: "",
+      quantityInGrams: 0,
+    });
   };
 
   const handleChange = (e: any) => {
@@ -109,13 +153,16 @@ export const App = () => {
         row={selectedRow}
         operation={operation}
         onChange={handleChange}
+        onConfirm={handleModalConfirm}
       />
       <Box display="flex" justifyContent="space-between" marginBottom={2}>
         <Box display="flex">
           <Typography variant="h4">Tralexho Ecosystem</Typography>
         </Box>
         <Box display="flex">
-          <Button variant="contained">Add</Button>
+          <Button variant="contained" onClick={handleAdd}>
+            Add
+          </Button>
         </Box>
       </Box>
       <Box style={{ height: 400, width: "100%" }}>
@@ -128,7 +175,6 @@ export const App = () => {
             },
           }}
           pageSizeOptions={[5, 10]}
-          checkboxSelection
         />
       </Box>
     </Box>
