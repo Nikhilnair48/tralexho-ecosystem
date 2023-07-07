@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Typography, Button } from "@mui/material";
 import { Modal } from "./common/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 let columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -17,27 +17,38 @@ let columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    name: "fish1",
-    location: "Kochi",
-    owner: "Tralexho",
-    quantityInGrams: 250,
-  },
-  {
-    id: 2,
-    name: "fish2",
-    location: "Kochi",
-    owner: "Tralexho",
-    quantityInGrams: 250,
-  },
-];
+// const rows = [
+//   {
+//     id: 1,
+//     name: "fish1",
+//     location: "Kochi",
+//     owner: "Tralexho",
+//     quantityInGrams: 250,
+//   },
+//   {
+//     id: 2,
+//     name: "fish2",
+//     location: "Kochi",
+//     owner: "Tralexho",
+//     quantityInGrams: 250,
+//   },
+// ];
 
 export const App = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedRow, setSelectedRow] = useState({});
   const [operation, setOperation] = useState("");
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:3001/products");
+      const data = await response.json();
+      if (JSON.stringify(data) !== JSON.stringify(rows)) setRows(data);
+      console.log(data);
+    };
+    fetchData();
+  }, [rows]);
 
   const handleModalClose = () => {
     setShowDialog(false);

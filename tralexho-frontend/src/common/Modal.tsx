@@ -1,4 +1,3 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -44,6 +43,7 @@ export function Modal(props: IModal) {
               variant="standard"
               value={row.name}
               onChange={onChange}
+              disabled={operation === "Delete"}
             />
             <TextField
               margin="dense"
@@ -53,6 +53,7 @@ export function Modal(props: IModal) {
               variant="standard"
               value={row.location}
               onChange={onChange}
+              disabled={operation === "Delete"}
             />
             <TextField
               margin="dense"
@@ -62,6 +63,7 @@ export function Modal(props: IModal) {
               variant="standard"
               value={row.owner}
               onChange={onChange}
+              disabled={operation === "Delete"}
             />
             <TextField
               margin="dense"
@@ -71,6 +73,7 @@ export function Modal(props: IModal) {
               variant="standard"
               value={row.quantityInGrams}
               onChange={onChange}
+              disabled={operation === "Delete"}
             />
           </DialogContentText>
         </DialogContent>
