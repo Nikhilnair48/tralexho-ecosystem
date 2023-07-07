@@ -1,6 +1,8 @@
 import { Box } from "@mui/system";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Typography, Button } from "@mui/material";
+import { Modal } from "./common/Modal";
+import { useState } from "react";
 
 let columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
@@ -33,12 +35,33 @@ const rows = [
 ];
 
 export const App = () => {
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedRow, setSelectedRow] = useState({});
+  const [operation, setOperation] = useState("");
+
+  const handleModalClose = () => {
+    setShowDialog(false);
+    setOperation("");
+    setSelectedRow({});
+  };
+
   const handleEdit = (row: any) => {
-    console.log(`handleEdit ${JSON.stringify(row)}`);
+    setShowDialog(true);
+    setOperation("Edit");
+    setSelectedRow(row);
   };
 
   const handleDelete = (row: any) => {
-    console.log(`handleDelete ${JSON.stringify(row)}`);
+    setShowDialog(true);
+    setOperation("Delete");
+    setSelectedRow(row);
+  };
+
+  const handleChange = (e: any) => {
+    setSelectedRow({
+      ...selectedRow,
+      [e.target.id]: e.target.value,
+    });
   };
 
   columns.push({
@@ -69,6 +92,13 @@ export const App = () => {
 
   return (
     <Box padding={2}>
+      <Modal
+        open={showDialog}
+        onClose={handleModalClose}
+        row={selectedRow}
+        operation={operation}
+        onChange={handleChange}
+      />
       <Box display="flex" justifyContent="space-between" marginBottom={2}>
         <Box display="flex">
           <Typography variant="h4">Tralexho Ecosystem</Typography>
