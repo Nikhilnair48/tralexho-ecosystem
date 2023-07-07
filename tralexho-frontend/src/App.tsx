@@ -1,8 +1,8 @@
 import { Box } from "@mui/system";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { Typography, Button } from "@mui/material";
 
-const columns: GridColDef[] = [
+let columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
   { field: "name", headerName: "Product", width: 130 },
   { field: "location", headerName: "Location", width: 130 },
@@ -33,6 +33,40 @@ const rows = [
 ];
 
 export const App = () => {
+  const handleEdit = (row: any) => {
+    console.log(`handleEdit ${JSON.stringify(row)}`);
+  };
+
+  const handleDelete = (row: any) => {
+    console.log(`handleDelete ${JSON.stringify(row)}`);
+  };
+
+  columns.push({
+    field: "actions",
+    headerName: "Actions",
+    sortable: false,
+    renderCell: (params: GridRenderCellParams<Date>) => (
+      <Box>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleEdit(params.row)}
+        >
+          EDIT
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          style={{ marginLeft: 16 }}
+          onClick={() => handleDelete(params.row)}
+        >
+          DELETE
+        </Button>
+      </Box>
+    ),
+    width: 300,
+  });
+
   return (
     <Box padding={2}>
       <Box display="flex" justifyContent="space-between" marginBottom={2}>
