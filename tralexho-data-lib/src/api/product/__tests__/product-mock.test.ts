@@ -15,5 +15,5 @@ export const mockEdgeCases = [
 
 // TODO: will fail at the moment. test case to be rewritten once mongo connection is set
 test("should throw an error when id is missing", () => {
-  expect(() => productFactory.build({ id: undefined })).toThrowError();
+  expect(() => productFactory.build({ name: undefined })).toThrowError();
 });

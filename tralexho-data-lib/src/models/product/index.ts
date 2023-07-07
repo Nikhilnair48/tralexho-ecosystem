@@ -2,9 +2,6 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 
 class Product {
   @prop({ required: true })
-  id!: string;
-
-  @prop({ required: true })
   name!: string;
 
   @prop({ required: true })

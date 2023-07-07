@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import * as dotenvFlow from "dotenv-flow";
 
 dotenvFlow.config({
@@ -6,8 +5,6 @@ dotenvFlow.config({
 });
 
 import mongoose, { Connection } from "mongoose";
-
-dotenv.config();
 
 const createConnection = async (): Promise<Connection> => {
   const { MONGO_HOST, MONGO_PORT, MONGO_DB } = process.env;
