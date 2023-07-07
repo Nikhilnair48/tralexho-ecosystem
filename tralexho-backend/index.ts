@@ -1,9 +1,16 @@
 import express, { Request, Response } from "express";
 import { ProductModel, createConnection } from "tralexho-data-lib/dist";
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
-const port = 3000;
+app.use(cors());
+app.use(function (_req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
+const port = 3001;
 createConnection();
 
 app.get("/products", async (req: Request, res: Response) => {
