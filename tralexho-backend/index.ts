@@ -18,16 +18,15 @@ app.get("/products", async (req: Request, res: Response) => {
   return res.status(200).json(products);
 });
 
-app.get("/product", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const product = await ProductModel.find({ id }).exec();
+app.get("/product/:productId", async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const product = await ProductModel.find({ _id: productId }).exec();
   return res.status(200).json(product);
 });
 
 app.post("/product", async (req: Request, res: Response) => {
   const { name, location, owner, quantityInGrams } = req.body;
   const product = await ProductModel.create({
-    id: "abc",
     name,
     location,
     owner,
@@ -37,29 +36,35 @@ app.post("/product", async (req: Request, res: Response) => {
 });
 
 app.put("/product/:productId", async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { productId } = req.params;
   const { name, location, owner, quantityInGrams } = req.body;
-  const updatedPerson = await ProductModel.findByIdAndUpdate({
-    id,
-    name,
-    location,
-    owner,
-    quantityInGrams,
-  });
+  const updatedPerson = await ProductModel.findByIdAndUpdate(
+    {
+      _id: productId,
+    },
+    {
+      name,
+      location,
+      owner,
+      quantityInGrams,
+    }
+  );
   if (updatedPerson) {
     res.json(updatedPerson);
   } else {
-    res.status(404).json({ error: "Person not found" });
+    res.status(404).json({ error: "Product not found" });
   }
 });
 
 app.delete("/product/:productId", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const deletedPerson = await ProductModel.findByIdAndDelete(id).exec();
+  const { productId } = req.params;
+  const deletedPerson = await ProductModel.findByIdAndDelete({
+    _id: productId,
+  }).exec();
   if (deletedPerson) {
-    res.json({ message: "Person deleted" });
+    res.json({ message: "Product deleted" });
   } else {
-    res.status(404).json({ error: "Person not found" });
+    res.status(404).json({ error: "Product not found" });
   }
 });
 
