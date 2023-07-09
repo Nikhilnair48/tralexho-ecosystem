@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "rm -r dist/ && tsc",
     "start": "tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nikhil Nair",
   "license": "ISC",
   "devDependencies": {
+    "@jest/globals": "^29.6.1",
+    "@types/jest": "^29.5.2",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
